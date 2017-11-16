@@ -128,11 +128,11 @@
 			this.trigger('dropdown.keydown');
 		}.bind(this));
 		
-		this.inputDom.addEventListener('blur', blur.bind(this));
-		this.listDom.addEventListener('blur', blur.bind(this));
-		
 		this.inputDom.addEventListener('focus', focus.bind(this));
+		this.inputDom.addEventListener('blur', blur.bind(this));
+		
 		this.listDom.addEventListener('focus', focus.bind(this));
+		this.listDom.addEventListener('blur', blur.bind(this));
 
 		function blur(){
 			hideDropdownList = true;
@@ -141,7 +141,7 @@
 					this.listDom.style.display = 'none';
 				}
 				clearTimeout(timer);
-			}.bind(this), 100);
+			}.bind(this), 0);
 
 			this.trigger('dropdown.blur');
 		}
@@ -152,7 +152,7 @@
 			hideDropdownList = false;
 			this.trigger('dropdown.focus');
 		}
-		
+
 		this.listDom.addEventListener('click', function(e){
 			e.path.forEach(function(p){
 				if(p.tagName && p.tagName.toLowerCase() == 'li'){
