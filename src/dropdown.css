@@ -20,6 +20,8 @@
     background: #fff;
     outline: 0;
     list-style: none;
+    max-height: 100px;
+    overflow: auto;
 }
 .x-dropdown>.list>li{
 	cursor: pointer;
@@ -30,6 +32,7 @@
 	-o-user-select: none;
 	user-select: none;
 }
+.x-dropdown>.list>li:focus,
 .x-dropdown>.list>li:hover,
 .x-dropdown>.list>li.selected{
 	background: #3da1ff;

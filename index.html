@@ -25,6 +25,7 @@
 		var d0 = new xDropdown({
 			container: dropdown,
 			listData: listData,
+			keydownShowList: false,
 			type: 'text'
 		}).init();
 		d0.on('dropdown.input', function(){
@@ -51,6 +52,9 @@
 				}));
 			}
 		})
+		d0.on('dropdown.keydown.before', function(e){
+
+		});
 		d0.on('dropdown.focus', function(){
 			console.log('focus')
 			var value = d0.getValue();
@@ -76,9 +80,15 @@
 		d1.on('dropdown.input', function(){
 			var t = setTimeout(function(){
 				d1.updateListData([
-					{image: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1248943687,3566907402&fm=58&s=0952E4139434ED9056D191D403004031&bpow=121&bpoh=75',text: 'xdraw'}, 
-					{image: 'https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2967709829,316850106&fm=85&s=A0D2EA225DD606DA0A3DAC920100C092', text: 'xdropdown'}, 
-					{image: 'https://ss0.baidu.com/73F1bjeh1BF3odCf/it/u=2942791344,2943623153&fm=85&s=6B970E8E081149D20299AD44030030FB', text: 'xclip'}
+					{image: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1248943687,3566907402&fm=58&s=0952E4139434ED9056D191D403004031&bpow=121&bpoh=75',text: 'a'}, 
+					{image: 'https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2967709829,316850106&fm=85&s=A0D2EA225DD606DA0A3DAC920100C092', text: 'b'}, 
+					{image: 'https://ss0.baidu.com/73F1bjeh1BF3odCf/it/u=2942791344,2943623153&fm=85&s=6B970E8E081149D20299AD44030030FB', text: 'c'},
+					{image: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1248943687,3566907402&fm=58&s=0952E4139434ED9056D191D403004031&bpow=121&bpoh=75',text: 'd'}, 
+					{image: 'https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2967709829,316850106&fm=85&s=A0D2EA225DD606DA0A3DAC920100C092', text: 'e'}, 
+					{image: 'https://ss0.baidu.com/73F1bjeh1BF3odCf/it/u=2942791344,2943623153&fm=85&s=6B970E8E081149D20299AD44030030FB', text: 'f'},
+					{image: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1248943687,3566907402&fm=58&s=0952E4139434ED9056D191D403004031&bpow=121&bpoh=75',text: 'g'}, 
+					{image: 'https://ss0.baidu.com/73t1bjeh1BF3odCf/it/u=2967709829,316850106&fm=85&s=A0D2EA225DD606DA0A3DAC920100C092', text: 'h'}, 
+					{image: 'https://ss0.baidu.com/73F1bjeh1BF3odCf/it/u=2942791344,2943623153&fm=85&s=6B970E8E081149D20299AD44030030FB', text: 'i'}
 				]);
 				clearTimeout(t);
 			}, 1000);

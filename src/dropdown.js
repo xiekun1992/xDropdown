@@ -33,6 +33,7 @@
 
 		var defaultOptions = {
 			container: document.body,
+			keydownShowList: true,
 			listData: [], // [{id: , text: , image: }]
 			type: 'text' // text|image-text
 		};
@@ -71,13 +72,13 @@
 	}
 	Dropdown.prototype.initEvent = function(){
 		var hideDropdownList = true;
-		this.inputDom.addEventListener('input', function(){
+		this.inputDom.addEventListener('input', function(e){
 			this.showLoading(true);
 			if(!this.inputDom.value){
 				this.listDom.style.display = 'none';
 				this.showLoading(false);
 			}
-			this.trigger('dropdown.input');
+			this.trigger('dropdown.input', e);
 		}.bind(this));
 		function unselected(){
 			if(this.selectedIndex >= 0){
@@ -87,7 +88,9 @@
 			}
 		}
 		this.dom.addEventListener('keydown', function(e){
-			if(this.listDom.style.display === 'none') return;
+			if(!this.options.keydownShowList && this.listDom.style.display === 'none')
+				return;
+
 			switch(e.keyCode){
 				case 38: 
 					unselected.call(this);
@@ -99,10 +102,11 @@
 						this.listDom.focus();
 						if(this.selectedIndex >= 0){
 							this.listDom.children[this.selectedIndex].classList.add('selected');
+							this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
 						}
 					}
 					break; // up
-				case 40: 
+				case 40:
 					this.selectedIndex++;
 					unselected.call(this);
 					if(this.selectedIndex >= this.listData.length){
@@ -111,6 +115,8 @@
 					this.listDom.focus();
 					if(this.selectedIndex >= 0){
 						this.listDom.children[this.selectedIndex].classList.add('selected');
+						this.listDom.style.display = 'block'; 
+						this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
 					}
 					break; // down
 				case 32:
@@ -126,13 +132,13 @@
 					break; // enter
 			}
 
-			this.trigger('dropdown.keydown');
+			this.trigger('dropdown.keydown', e);
 		}.bind(this));
 		
 		var isMouseOn = false; // 控制chrome浏览器输入框在浏览器之外丢失焦点时会触发一次onblur，再次点击页面空白处时会触发onfocus和onblur的问题，firefox不会出现
-		this.inputDom.addEventListener('focus', function(){
+		this.inputDom.addEventListener('focus', function(e){
 			if(isMouseOn){
-				focus.call(this);
+				focus.call(this, e);
 			}
 		}.bind(this));
 		this.inputDom.addEventListener('blur', function(){
@@ -147,7 +153,7 @@
 		this.listDom.addEventListener('focus', focus.bind(this));
 		this.listDom.addEventListener('blur', blur.bind(this));
 
-		function blur(){
+		function blur(e){
 
 			isMouseOn = false;
 			hideDropdownList = true;
@@ -158,16 +164,23 @@
 				clearTimeout(timer);
 			}.bind(this), 0);
 
-			this.trigger('dropdown.blur');
+			this.trigger('dropdown.blur', e);
 		}
-		function focus(){
+		function focus(e){
 			hideDropdownList = false;
 			if(this.listData.length > 0){
-				this.listDom.style.display = 'block';
+				// this.listDom.style.display = 'block';
 			}
-			this.trigger('dropdown.focus');
+			e.preventDefault();
+			this.trigger('dropdown.focus', e);
 		}
-
+		this.inputDom.addEventListener('click', function(e){
+			if(this.listDom.style.display === 'none'){
+				this.listDom.style.display = 'block';
+			}else{
+				this.listDom.style.display = 'none';
+			}
+		}.bind(this));
 		this.listDom.addEventListener('click', function(e){
 			e.path.forEach(function(p){
 				if(p.tagName && p.tagName.toLowerCase() == 'li'){
