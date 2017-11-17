@@ -52,7 +52,7 @@
 	}
 	Dropdown.prototype.initDom = function(){
 		this.dom = document.createElement('div');
-		this.dom.setAttribute('class', 'container');
+		this.dom.setAttribute('class', 'x-dropdown');
 
 		this.inputDom = document.createElement('input');
 		this.inputDom.setAttribute('class', 'input');
@@ -80,14 +80,18 @@
 			}
 			this.trigger('dropdown.input');
 		}.bind(this));
-
+		function unselected(){
+			if(this.selectedIndex >= 0){
+				Array.prototype.slice.call(this.listDom.children).forEach(function(o){
+					o.classList.remove('selected');	
+				});
+			}
+		}
 		this.dom.addEventListener('keydown', function(e){
 			if(this.listDom.style.display === 'none') return;
 			switch(e.keyCode){
 				case 38: 
-					if(this.selectedIndex >= 0){
-						this.listDom.children[this.selectedIndex].classList.remove('selected');
-					}
+					unselected.call(this);
 					this.selectedIndex--;
 					if(this.selectedIndex <= -1){
 						this.selectedIndex = -1;
@@ -100,10 +104,8 @@
 					}
 					break; // up
 				case 40: 
-					if(this.selectedIndex >= 0){
-						this.listDom.children[this.selectedIndex].classList.remove('selected');
-					}
 					this.selectedIndex++;
+					unselected.call(this);
 					if(this.selectedIndex >= this.listData.length){
 						this.selectedIndex = this.listData.length - 1;
 					}
@@ -128,13 +130,27 @@
 			this.trigger('dropdown.keydown');
 		}.bind(this));
 		
-		this.inputDom.addEventListener('focus', focus.bind(this));
-		this.inputDom.addEventListener('blur', blur.bind(this));
+		var isMouseOn = false; // 控制chrome浏览器输入框在浏览器之外丢失焦点时会触发一次onblur，再次点击页面空白处时会触发onfocus和onblur的问题，firefox不会出现
+		this.inputDom.addEventListener('focus', function(){
+			if(isMouseOn){
+				focus.call(this);
+			}
+		}.bind(this));
+		this.inputDom.addEventListener('blur', function(){
+			if(isMouseOn){
+				blur.call(this);
+			}
+		}.bind(this));
+		this.inputDom.addEventListener('mouseover', function(e){
+			isMouseOn = true;
+		});
 		
 		this.listDom.addEventListener('focus', focus.bind(this));
 		this.listDom.addEventListener('blur', blur.bind(this));
 
 		function blur(){
+
+			isMouseOn = false;
 			hideDropdownList = true;
 			var timer = setTimeout(function(){
 				if(hideDropdownList){
@@ -146,10 +162,10 @@
 			this.trigger('dropdown.blur');
 		}
 		function focus(){
+			hideDropdownList = false;
 			if(this.listData.length > 0){
 				this.listDom.style.display = 'block';
 			}
-			hideDropdownList = false;
 			this.trigger('dropdown.focus');
 		}
 
@@ -199,6 +215,12 @@
 			html += "<li><img src='" + o.image + "'><span>" + o.text + "</span></li>";
 		});
 		this.listDom.innerHTML = html;
+	}
+	Dropdown.prototype.getValue = function(){
+		return this.inputDom.value;
+	}
+	Dropdown.prototype.setValue = function(value){
+		this.inputDom.value = value;
 	}
 	return Dropdown;
 });

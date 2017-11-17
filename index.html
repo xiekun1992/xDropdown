@@ -13,6 +13,8 @@
 <body>
 	<div id="dropdown"></div>
 	<div id="dropdown1"></div>
+	<select onfocus="console.log(1)" onblur="console.log(2)" onmouseover="console.log(0)"></select>
+	<input type="text" onfocus="console.log(11)" onblur="console.log(12)">
 	<script src="src/dropdown.js"></script>
 	<script>
 		var mailList = ['@163.com', '@qq.com', '@126.com'];
@@ -28,26 +30,37 @@
 		d0.on('dropdown.input', function(){
 			var flag = false;
 			var filterData = [];
-			var index = d0.inputDom.value.indexOf('@');
+			var value = d0.getValue();
+			var index = value.indexOf('@');
 			if(index > -1){
 				for(var i = 0; i < mailList.length; i++){
-					if((d0.inputDom.value.substr(0, index) + mailList[i]).indexOf(d0.inputDom.value) !== -1){
+					var mailTmp = value.substr(0, index) + mailList[i];
+					if(mailTmp.indexOf(value) !== -1){
 						filterData.push({
-							text: d0.inputDom.value.substr(0, index) + mailList[i]
+							text: mailTmp
 						});
 					}
 				}
 				d0.updateListData(filterData);
 			}else{
-				d0.updateListData([
-					{text: d0.inputDom.value + '@163.com'}, 
-					{text: d0.inputDom.value + '@qq.com'}, 
-					{text: d0.inputDom.value + '@126.com'}
-				]);
+				d0.updateListData(mailList.map(function(o){
+					return {text: value + o};
+				}));
 			}
 		})
 		d0.on('dropdown.focus', function(){
 			console.log('focus')
+			var value = d0.getValue();
+			var index = value.indexOf('@');
+			if(index > -1){
+				for(var i = 0; i < mailList.length; i++){
+					var mailTmp = value.substr(0, index) + mailList[i];
+					if(value === mailTmp){
+						d0.updateListData([]);
+						break;
+					}
+				}
+			}
 		});
 		d0.on('dropdown.blur', function(){
 			console.log('blur')
