@@ -35,6 +35,9 @@
 			if(index > -1){
 				for(var i = 0; i < mailList.length; i++){
 					var mailTmp = value.substr(0, index) + mailList[i];
+					if(mailTmp === value){
+						break;
+					}
 					if(mailTmp.indexOf(value) !== -1){
 						filterData.push({
 							text: mailTmp
