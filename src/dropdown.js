@@ -57,9 +57,8 @@
 		this.inputDom = document.createElement('input');
 		this.inputDom.setAttribute('class', 'input');
 
-		this.loadingDom = document.createElement('img');
+		this.loadingDom = document.createElement('i');
 		this.loadingDom.setAttribute('class', 'loading');
-		this.loadingDom.setAttribute('src', './../images/loading.gif');
 
 		this.listDom = document.createElement('ul');
 		this.listDom.setAttribute('class', 'list');

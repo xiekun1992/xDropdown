@@ -2,12 +2,6 @@
 	position: relative;
 	display: inline-block;
 }
-.x-dropdown>.list>li>img{
-	max-width: 100%;
-	max-height: 100%;
-    width: 10%;
-    margin-right: 3%;
-}
 .x-dropdown>.input,
 .x-dropdown>.list>li{
 	padding: 0 8px;
@@ -43,8 +37,12 @@
 }
 .loading{
 	position: absolute;
-	width: 1em;
-    right: 0.2em;
-    top: 0.2em;
+    right: 0.25em;
+    top: 0.25em;
     display: none;
+    background-image: url(./../images/loading.gif);
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: contain;
 }
