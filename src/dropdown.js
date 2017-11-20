@@ -99,11 +99,12 @@
 					if(this.selectedIndex <= -1){
 						this.selectedIndex = -1;
 						this.inputDom.focus();
+						this.listDom.style.display = 'none';
 					}else {
 						this.listDom.focus();
 						if(this.selectedIndex >= 0){
 							this.listDom.children[this.selectedIndex].classList.add('selected');
-							this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
+							this.listDom.children[this.selectedIndex].scrollIntoView();
 							e.preventDefault();
 						}
 					}
@@ -122,7 +123,7 @@
 					if(this.selectedIndex >= 0){
 						this.listDom.children[this.selectedIndex].classList.add('selected');
 						this.listDom.style.display = 'block'; 
-						this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
+						this.listDom.children[this.selectedIndex].scrollIntoView();
 						e.preventDefault();
 					}
 					break; // down
