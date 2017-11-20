@@ -104,6 +104,7 @@
 						if(this.selectedIndex >= 0){
 							this.listDom.children[this.selectedIndex].classList.add('selected');
 							this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
+							e.preventDefault();
 						}
 					}
 					break; // up
@@ -122,6 +123,7 @@
 						this.listDom.children[this.selectedIndex].classList.add('selected');
 						this.listDom.style.display = 'block'; 
 						this.listDom.children[this.selectedIndex].scrollIntoViewIfNeeded();
+						e.preventDefault();
 					}
 					break; // down
 				case 32:
