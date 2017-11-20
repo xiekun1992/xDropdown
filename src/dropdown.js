@@ -33,7 +33,7 @@
 
 		var defaultOptions = {
 			container: document.body,
-			keydownShowList: true,
+			keydownShowList: true, // 下方向键显示下拉列表
 			listData: [], // [{id: , text: , image: }]
 			type: 'text' // text|image-text
 		};
@@ -63,6 +63,7 @@
 
 		this.listDom = document.createElement('ul');
 		this.listDom.setAttribute('class', 'list');
+		this.listDom.setAttribute('style', 'display: none;');
 		this.listDom.setAttribute('tabindex', '-1');
 
 		this.dom.appendChild(this.inputDom);
@@ -74,10 +75,7 @@
 		var hideDropdownList = true;
 		this.inputDom.addEventListener('input', function(e){
 			this.showLoading(true);
-			if(!this.inputDom.value){
-				this.listDom.style.display = 'none';
-				this.showLoading(false);
-			}
+			this.selectedIndex = -1;
 			this.trigger('dropdown.input', e);
 		}.bind(this));
 		function unselected(){
@@ -92,7 +90,10 @@
 				return;
 
 			switch(e.keyCode){
-				case 38: 
+				case 38:
+					if(this.listDom.style.display == 'none'){
+						break;
+					} 
 					unselected.call(this);
 					this.selectedIndex--;
 					if(this.selectedIndex <= -1){
@@ -107,6 +108,10 @@
 					}
 					break; // up
 				case 40:
+					if(this.selectedIndex >= 0 && this.listDom.style.display == 'none'){
+						this.listDom.style.display = 'block';
+						break;
+					}
 					this.selectedIndex++;
 					unselected.call(this);
 					if(this.selectedIndex >= this.listData.length){
@@ -125,7 +130,6 @@
 						this.inputDom.value = this.listData[this.selectedIndex].text;
 						this.inputDom.focus();
 						this.listDom.style.display = 'none';
-						this.selectedIndex = -1;
 						this.trigger('dropdown.select', { obj: this.listData[this.selectedIndex], index: this.selectedIndex});
 						e.preventDefault();
 					}
@@ -154,7 +158,6 @@
 		this.listDom.addEventListener('blur', blur.bind(this));
 
 		function blur(e){
-
 			isMouseOn = false;
 			hideDropdownList = true;
 			var timer = setTimeout(function(){
@@ -163,18 +166,17 @@
 				}
 				clearTimeout(timer);
 			}.bind(this), 0);
-
 			this.trigger('dropdown.blur', e);
 		}
 		function focus(e){
 			hideDropdownList = false;
 			if(this.listData.length > 0){
-				// this.listDom.style.display = 'block';
+				this.listDom.style.display = 'block';
 			}
 			e.preventDefault();
 			this.trigger('dropdown.focus', e);
 		}
-		this.inputDom.addEventListener('click', function(e){
+		this.inputDom.addEventListener('mousedown', function(e){		
 			if(this.listDom.style.display === 'none'){
 				this.listDom.style.display = 'block';
 			}else{
@@ -182,13 +184,14 @@
 			}
 		}.bind(this));
 		this.listDom.addEventListener('click', function(e){
+			// 查找事件传递的路径中的li元素
 			e.path.forEach(function(p){
 				if(p.tagName && p.tagName.toLowerCase() == 'li'){
 					var index = [].slice.call(this.listDom.children).indexOf(p);
 					this.inputDom.value = this.listData[index].text;
 					this.inputDom.focus();
 					this.listDom.style.display = 'none';
-					this.selectedIndex = -1;
+					this.selectedIndex = index;
 					this.trigger('dropdown.select', { obj: this.listData[index], index: index});
 				}
 			}.bind(this));
