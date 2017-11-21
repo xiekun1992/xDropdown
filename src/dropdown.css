@@ -38,7 +38,7 @@
 	background: #3da1ff;
 	color: #fff;
 }
-.loading{
+.x-dropdown>.loading{
 	position: absolute;
     right: 0.25em;
     top: 0.25em;
@@ -47,5 +47,6 @@
     width: 1em;
     height: 1em;
     display: inline-block;
+    background-repeat: no-repeat;
     background-size: contain;
 }

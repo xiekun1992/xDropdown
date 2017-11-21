@@ -74,7 +74,7 @@
 	Dropdown.prototype.initEvent = function(){
 		var hideDropdownList = true;
 		this.inputDom.addEventListener('input', function(e){
-			this.showLoading(true);
+			// this.showLoading(true);
 			this.selectedIndex = -1;
 			this.trigger('dropdown.input', e);
 		}.bind(this));
